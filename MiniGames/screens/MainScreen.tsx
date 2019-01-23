@@ -7,14 +7,14 @@ export default class MainScreen extends React.Component {
       <View style={styles.container}>
         <Text>Best view ever</Text>
         <Text>Open up App.tsx to start working on your app!</Text>
-        <Button title={"Go to 2"} onPress={this.onButtonPress.bind(this)} />
+        <Button title={"Connexion"} onPress={this.onButtonPress.bind(this)} />
       </View>
     );
   }
 
   private onButtonPress() {
     console.log("BUTTON PRESS");
-    this.props.navigation.navigate("Other");
+    this.props.navigation.navigate("Login");
   }
 }
 
