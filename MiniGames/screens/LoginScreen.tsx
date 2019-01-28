@@ -17,6 +17,6 @@ export default class LoginScreen extends React.Component {
 
   private onButtonPress() {
     console.log("BUTTON PRESS : Inscription");
-    this.props.navigation.navigate("SignUp");
+    this.props.navigation.navigate("Differences");
   }
 }
