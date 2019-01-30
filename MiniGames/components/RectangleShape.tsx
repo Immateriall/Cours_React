@@ -12,8 +12,8 @@ export class RectangleShape extends React.Component {
 const styles = StyleSheet.create({
     RectangleShapeView: {
   
-        width: 40 * 2,
-        height: 40,
+        width: 37 * 2,
+        height: 37,
         backgroundColor: '#FFC107'  
         }
 })
