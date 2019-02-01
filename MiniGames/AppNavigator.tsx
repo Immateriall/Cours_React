@@ -1,9 +1,10 @@
-import { createStackNavigator, createAppContainer } from "react-navigation";
+import { createAppContainer, createStackNavigator } from "react-navigation";
+
+import DifferencesScreen from "./screens/DifferencesScreen";
+import LoginScreen from "./screens/LoginScreen";
 import MainScreen from "./screens/MainScreen";
 import OtherScreen from "./screens/OtherScreen";
-import LoginScreen from "./screens/LoginScreen";
 import SignUpScreen from "./screens/SignUpScreen";
-import DifferencesScreen from "./screens/DifferencesScreen";
 
 const AppNavigator = createStackNavigator(
   {
@@ -14,7 +15,7 @@ const AppNavigator = createStackNavigator(
     Differences: DifferencesScreen
   },
   {
-    initialRouteName: "Main"
+    initialRouteName: "Login"
   }
 );
 

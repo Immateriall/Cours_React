@@ -18,28 +18,31 @@ class FirebaseService {
 
   public async signUp(email: string, password: string, pseudo: string) {
     console.log("SIGN UP : ", email, "/", password);
-    const userCredentials = await this.app
-      .auth()
-      .createUserWithEmailAndPassword(email, password);
-    // console.log("USER CREDENTIALS : ", userCredentials);
-    if (userCredentials && userCredentials.user) {
+
+    try {
+      const userCredentials = await this.app
+        .auth()
+        .createUserWithEmailAndPassword(email, password);
       const userId = userCredentials.user.uid;
-      console.log("USER ID : ", userId);
+      console.log("Created user : ", userId);
+      const user: User = {
+        id: userId,
+        email,
+        pseudo
+      };
+      console.log("USER : ", user);
       this.app
         .database()
         .ref("users/" + userId)
-        .set({
-          email,
-          pseudo
-        })
-        .then(data => {
-          //success callback
-          console.log("data ", data);
-        })
+        .set(user)
         .catch(error => {
-          //error callback
           console.log("error ", error);
+          throw error;
         });
+      return user;
+    } catch (error) {
+      console.log("ERROR SIGN UP: ", error);
+      throw error;
     }
   }
 
@@ -57,6 +60,7 @@ class FirebaseService {
         .once("value", snapshot => {
           const res = snapshot.val();
           const userData: User = {
+            id: userId,
             email: res.email,
             pseudo: res.pseudo
           };
@@ -65,9 +69,25 @@ class FirebaseService {
           return userData;
         });
       return data;
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
+  }
 
-    return null;
+  public async updateUser(user: User) {
+    try {
+      this.app
+        .database()
+        .ref("users/" + user.id)
+        .set(user)
+        .catch(error => {
+          console.log("error ", error);
+          throw error;
+        });
+      return user;
+    } catch (error) {
+      throw error;
+    }
   }
 }
 
