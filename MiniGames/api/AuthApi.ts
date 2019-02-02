@@ -1,8 +1,16 @@
 import { firebaseService } from "../services/Firebase";
 
+export type GameScore = {
+  score: number;
+};
+
 export type User = {
+  id: string;
   email: string;
   pseudo: string;
+  scores: {
+    [gameId: string]: GameScore;
+  };
 };
 
 class AuthApi {
@@ -20,8 +28,16 @@ class AuthApi {
 
     const userData = await firebaseService.signUp(email, password, pseudo);
     const user: User = JSON.parse(JSON.stringify(userData));
+    // console.log("SIGNED UP USER", user);
 
     return user;
+  }
+
+  public async updateUser(user: User) {
+    const newUserData = firebaseService.updateUser(user);
+    // const newUser: User = JSON.parse(JSON.stringify(newUserData));
+
+    return newUserData;
   }
 }
 

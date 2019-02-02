@@ -1,11 +1,11 @@
 import { Formik } from "formik";
 import React from "react";
-import { Button, TextInput, View } from "react-native";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { connect } from "react-redux";
 
 import { authApi, User } from "../api/AuthApi";
 import { setUserAction } from "../store/actions";
-import { UserProfile } from "./UserProfile";
+import { Spacer } from "./Spacer";
 
 type LoginFormValues = {
   email: string;
@@ -14,17 +14,20 @@ type LoginFormValues = {
 
 type LoginFormProps = {
   setUserAction: typeof setUserAction;
+  onLoginSuccess: () => void;
 };
 
 type LoginFormState = {
-  loginSuccess: boolean;
+  loginFailed: boolean;
+  errorMsg: string;
 };
 
 class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      loginSuccess: false
+      loginFailed: false,
+      errorMsg: ""
     };
   }
 
@@ -37,12 +40,14 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
         >
           {props => (
             <View>
+              <Spacer size="medium" />
               <TextInput
                 placeholder="Email"
                 onChangeText={props.handleChange("email")}
                 onBlur={props.handleBlur("email")}
                 value={props.values.email}
               />
+              <Spacer size="medium" />
               <TextInput
                 placeholder="Mot de passe"
                 secureTextEntry={true}
@@ -50,23 +55,38 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
                 onBlur={props.handleBlur("password")}
                 value={props.values.password}
               />
+              <Spacer size="medium" />
+
+              {this.state.loginFailed && (
+                <Text style={styles.error}>Error: {this.state.errorMsg}</Text>
+              )}
               <Button onPress={props.handleSubmit} title="Connexion" />
             </View>
           )}
         </Formik>
-        {this.state.loginSuccess && <UserProfile />}
       </React.Fragment>
     );
   }
 
   private async onLogin(values: LoginFormValues) {
-    const user = await authApi.login(values.email, values.password);
-    if (user) {
-      this.props.setUserAction(user);
-      this.setState({ loginSuccess: true });
+    try {
+      const user = await authApi.login(values.email, values.password);
+      console.log("LOGGED USER: ", user);
+      if (user) {
+        this.props.setUserAction(user);
+        this.props.onLoginSuccess();
+      }
+    } catch (error) {
+      this.setState({ loginFailed: true, errorMsg: error.message });
     }
   }
 }
+
+const styles = StyleSheet.create({
+  error: {
+    color: "red"
+  }
+});
 
 const LoginFormConnected = connect(
   null,
