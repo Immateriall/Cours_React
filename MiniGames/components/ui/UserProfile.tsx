@@ -39,7 +39,7 @@ class UserProfile extends React.Component<UserProfileProps, UserProfileState> {
         {pseudo && <Text>Pseudo : {pseudo}</Text>}
         {email && <Text>Email : {email}</Text>}
         <Spacer size="medium" />
-        {profileImageUri && (
+        {profileImageUri && profileImageUri.length > 0 && (
           <Image source={{ uri: profileImageUri }} style={styles.image} />
         )}
         {scores && this.renderScores()}
