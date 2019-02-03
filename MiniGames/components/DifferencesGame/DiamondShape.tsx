@@ -11,9 +11,8 @@ export class DiamondShape extends React.Component {
 
 const styles = StyleSheet.create({
     diamondShapeView:{
-        width: 50,
-        height: 50,
-        marginTop: 10,
+        width: 48,
+        height: 48,
         backgroundColor: 'pink',
         transform: [
           {rotate: '45deg'}

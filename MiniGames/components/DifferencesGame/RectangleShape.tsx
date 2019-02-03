@@ -14,6 +14,6 @@ const styles = StyleSheet.create({
   
         width: 37 * 2,
         height: 37,
-        backgroundColor: '#FFC107'  
+        backgroundColor: '#FFC107', 
         }
 })

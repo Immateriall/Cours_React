@@ -1,21 +1,39 @@
 import { difference } from "lodash";
 import React, { Component, ReactElement } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {Dimensions, StyleSheet, Text, TouchableOpacity, View, Button } from "react-native";
 
-import { CircleShape } from "../components/CircleShape";
-import { DiamondShape } from "../components/DiamondShape";
-import { RectangleShape } from "../components/RectangleShape";
-import { SquareShape } from "../components/SquareShape";
-import { TriangleShape } from "../components/TriangleShape";
+import { CircleShape } from "./CircleShape";
+import { DiamondShape } from "./DiamondShape";
+import { RectangleShape } from "./RectangleShape";
+import { SquareShape } from "./SquareShape";
+import { TriangleShape } from "./TriangleShape";
+import { Spacer } from "../common/Spacer";
+
+type DifferencesGameProps = {
+  onGameOver: (score: number) => void;
+};
 
 type DifferencesGameState = {
   score: number;
   //Tableau pour connaître les paires sélectionnées
   isLineSelected: boolean[];
+  //Variable pour connaître le nombre total de différences en jeu
+  maxDiff: number;
+  //Variable pour connaître le nombre de différences trouvées
+  nbDiff: number;
+  //Variable pour connaître le nombre de manches
+  round: number;
 };
 
 //Nombre de figures à afficher
 const numberShapes = 7;
+
+//Nombre de manches à jouer
+const maxRound = 5;
+
+//Dimensions de l'écran
+const width = Dimensions.get("screen").width;
+const height = Dimensions.get("screen").height;
 
 type Pair = {
   isCorrect: boolean;
@@ -32,14 +50,17 @@ const shapes = [
   <DiamondShape />
 ];
 
-export class DifferencesGame extends React.Component<{}, DifferencesGameState> {
+export class DifferencesGame extends React.Component<DifferencesGameProps, DifferencesGameState> {
   private scene: Pair[] = [];
 
   constructor(props: any) {
     super(props);
     this.state = {
       score: 0,
-      isLineSelected: new Array(numberShapes).fill(false)
+      isLineSelected: new Array(numberShapes).fill(false),
+      maxDiff: 0,
+      nbDiff: 0,
+      round: 1
     };
   }
 
@@ -50,10 +71,27 @@ export class DifferencesGame extends React.Component<{}, DifferencesGameState> {
 
     return (
       <View style={styles.container}>
-        <Text style={{ fontWeight: "bold" }}> Score: {this.state.score}</Text>
+        <View style={styles.default}>
+          <Text style={{ fontWeight: "bold" }}> Score: {this.state.score}</Text>
+          <View style={{ width: 150, height: 50 }} />
+          <Text style={{ fontWeight: "bold" }}> Manche: {this.state.round} / {maxRound}</Text>
+        </View>
         {this.renderScene()}
       </View>
     );
+  }
+
+  private reload() {
+    if (this.state.round != maxRound) {
+      this.setState({
+        isLineSelected: new Array(numberShapes).fill(false),
+        round: this.state.round + 1
+      });
+
+      this.scene = [];
+    } else {
+      this.props.onGameOver(this.state.score)
+    }
   }
 
   private renderScene() {
@@ -97,6 +135,7 @@ export class DifferencesGame extends React.Component<{}, DifferencesGameState> {
   //Créer une scène avec des figures
   private createScene() {
     let scene: Pair[] = [];
+    let maxDiff = this.state.maxDiff;
     for (let index = 0; index < numberShapes; index++) {
       //On choisit aléatoirement 1 figure parmis 5
       const randomShape = this.getRandomShape(null);
@@ -111,6 +150,13 @@ export class DifferencesGame extends React.Component<{}, DifferencesGameState> {
       };
 
       scene.push(pair);
+
+      if (isCorrect) {
+        maxDiff += 1;
+        this.setState({
+          maxDiff
+        });
+      }
     }
     return scene;
   }
@@ -127,17 +173,22 @@ export class DifferencesGame extends React.Component<{}, DifferencesGameState> {
   private setScore(diff: number, id: number) {
     let isLineSelected = this.state.isLineSelected;
     isLineSelected[id] = true;
+    let nbDiff = this.state.nbDiff;
     let score = this.state.score;
     score = diff ? (score += 10) : (score -= 10);
-
-    window.console.log("before = " + this.state.isLineSelected);
-
+    if (diff) {
+      nbDiff += 1;
+    }
     this.setState({
       isLineSelected: isLineSelected,
-      score
+      score,
+      nbDiff
     });
 
-    window.console.log("after = " + this.state.isLineSelected);
+    window.console.log(nbDiff + "   " + this.state.maxDiff);
+    if (nbDiff == this.state.maxDiff) {
+      this.reload();
+    }
   }
 }
 
@@ -151,21 +202,22 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     backgroundColor: "lightgreen",
-    borderStyle: "solid",
-    borderColor: "green",
-    borderWidth: 1
+    justifyContent: "center",
+    alignItems: "center"
   },
 
   wrong: {
     flex: 1,
     flexDirection: "row",
-    borderStyle: "solid",
-    borderColor: "red",
-    borderWidth: 1
+    backgroundColor: "#d73232",
+    justifyContent: "center",
+    alignItems: "center"
   },
 
   default: {
     flex: 1,
-    flexDirection: "row"
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
