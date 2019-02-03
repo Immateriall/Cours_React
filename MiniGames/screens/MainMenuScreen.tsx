@@ -18,7 +18,7 @@ export default class MainMenuScreen extends React.Component {
       {
         imageUri: require("../assets/differences_logo.png"),
         routeScreen: "DifferencesGame",
-        gameName: "7 Différences"
+        gameName: "Différences"
       }
     ];
     return <Carousel navigation={this.props.navigation} data={gameInfos} />;

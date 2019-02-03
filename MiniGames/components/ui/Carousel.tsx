@@ -40,18 +40,16 @@ export class Carousel extends React.Component<CarouselProps> {
             <View style={styles.gameView} key={gameInfo.gameName}>
               <Text style={styles.title}>{gameInfo.gameName}</Text>
               <Spacer size="medium" />
-              <Image
-                style={styles.image}
-                key={gameInfo.routeScreen}
-                source={gameInfo.imageUri}
-              />
-              <Spacer size="medium" />
-              <View style={styles.button}>
-                <Button
-                  title={"Jouer"}
-                  onPress={this.onButtonPress.bind(this, gameInfo.routeScreen)}
+              <TouchableOpacity
+                style={{ alignSelf: "flex-start" }}
+                onPress={this.onButtonPress.bind(this, gameInfo.routeScreen)}
+              >
+                <Image
+                  style={styles.image}
+                  key={gameInfo.routeScreen}
+                  source={gameInfo.imageUri}
                 />
-              </View>
+              </TouchableOpacity>
             </View>
           ))}
         </ScrollView>
