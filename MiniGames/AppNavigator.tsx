@@ -1,21 +1,37 @@
-import { createAppContainer, createStackNavigator } from "react-navigation";
+import {
+  createAppContainer,
+  createStackNavigator,
+  createSwitchNavigator
+} from "react-navigation";
 
 import DifferencesScreen from "./screens/DifferencesScreen";
+import GameOverScreen from "./screens/GameOverScreen";
 import LoginScreen from "./screens/LoginScreen";
 import MainScreen from "./screens/MainScreen";
-import OtherScreen from "./screens/OtherScreen";
 import SignUpScreen from "./screens/SignUpScreen";
+import SimonGameScreen from "./screens/SimonGameScreen";
+import SplashScreen from "./screens/SplashScreen";
 
-const AppNavigator = createStackNavigator(
+const AppStack = createStackNavigator({
+  Main: MainScreen,
+  Differences: DifferencesScreen,
+  GameOver: GameOverScreen,
+  SimonGame: SimonGameScreen
+});
+
+const AuthStack = createStackNavigator({
+  Login: LoginScreen,
+  SignUp: SignUpScreen
+});
+
+const AppNavigator = createSwitchNavigator(
   {
-    Main: MainScreen,
-    Other: OtherScreen,
-    Login: LoginScreen,
-    SignUp: SignUpScreen,
-    Differences: DifferencesScreen
+    Splash: SplashScreen,
+    App: AppStack,
+    Auth: AuthStack
   },
   {
-    initialRouteName: "Login"
+    initialRouteName: "Splash"
   }
 );
 

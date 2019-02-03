@@ -1,11 +1,12 @@
 import { Formik } from "formik";
 import React from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, StyleSheet, Text, TextInput, View, Image } from "react-native";
 import { connect } from "react-redux";
 
-import { authApi, User } from "../api/AuthApi";
-import { setUserAction } from "../store/actions";
-import { Spacer } from "./Spacer";
+import { authApi, User } from "../../api/AuthApi";
+import { setUserAction } from "../../store/actions";
+import { Spacer } from "../common/Spacer";
+import { ImagePicker } from "expo";
 
 type SignUpFormValues = {
   email: string;
@@ -15,11 +16,13 @@ type SignUpFormValues = {
 
 type SignUpFormProps = {
   setUserAction: typeof setUserAction;
+  onSignUpSuccess: () => void;
 };
 
 type SignUpFormState = {
   signUpFailed: boolean;
   errorMsg: string;
+  imageUri?: string;
 };
 
 class SignUpForm extends React.Component<SignUpFormProps, SignUpFormState> {
@@ -66,6 +69,11 @@ class SignUpForm extends React.Component<SignUpFormProps, SignUpFormState> {
             {this.state.signUpFailed && (
               <Text style={styles.error}>Error: {this.state.errorMsg}</Text>
             )}
+            {this.state.imageUri && (
+              <Image style={styles.image} source={{uri: this.state.imageUri}}></Image>
+            )}
+            <Button onPress={this.pickImage.bind(this)} title="Choisir une image" />
+            <Spacer size="medium"></Spacer>
             <Button onPress={props.handleSubmit} title="S'inscrire" />
           </View>
         )}
@@ -73,14 +81,28 @@ class SignUpForm extends React.Component<SignUpFormProps, SignUpFormState> {
     );
   }
 
+  private async pickImage() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 4]
+    });
+    if (!result.cancelled) {
+      this.setState({ imageUri: result.uri });
+    }
+  }
+
   private async onSignUp(values: SignUpFormValues) {
     try {
       const user = await authApi.signUp(
         values.email,
         values.password,
-        values.pseudo
+        values.pseudo,
+        this.state.imageUri || ""
       );
-      if (user) this.props.setUserAction(user);
+      if (user) {
+        this.props.setUserAction(user);
+        this.props.onSignUpSuccess();
+      }
     } catch (error) {
       this.setState({ signUpFailed: true, errorMsg: error.message });
     }
@@ -93,6 +115,13 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red"
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 30,
+    marginBottom: 20,
+    alignSelf: "center"
   },
   textInput: {
     // borderColor: "black",

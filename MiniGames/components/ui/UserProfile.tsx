@@ -1,15 +1,17 @@
 import React from "react";
-import { Button, Text, View } from "react-native";
+import { Button, Text, View, Image, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 
-import { authApi, User } from "../api/AuthApi";
-import { setUserAction } from "../store/actions";
-import { RootState } from "../store/RootState";
-import { getUser } from "../store/selectors";
+import { authApi, User } from "../../api/AuthApi";
+import { setUserAction } from "../../store/actions";
+import { RootState } from "../../store/RootState";
+import { getUser } from "../../store/selectors";
+import { Spacer } from "../common/Spacer";
 
 type UserProfileProps = {
   user: User;
   setUserAction: typeof setUserAction;
+  navigation: any;
 };
 
 type UserProfileState = {
@@ -27,15 +29,20 @@ class UserProfile extends React.Component<UserProfileProps, UserProfileState> {
   render() {
     if (!this.props.user) return null;
 
-    const { pseudo, email, scores } = this.props.user;
+    const { pseudo, email, profileImageUri, scores } = this.props.user;
 
     return (
       <View style={{ backgroundColor: "pink" }}>
         <Text>INFOS USER</Text>
         {pseudo && <Text>Pseudo : {pseudo}</Text>}
         {email && <Text>Email : {email}</Text>}
+        {profileImageUri && (
+          <Image source={{ uri: profileImageUri }} style={styles.image} />
+        )}
         {scores && this.renderScores()}
         <Button title={"TEST SCORE"} onPress={this.onTestScore.bind(this)} />
+        <Spacer size="medium"></Spacer>
+        <Button title={"Se déconnecter"} onPress={this.onSignOut.bind(this)} />
       </View>
     );
   }
@@ -81,6 +88,11 @@ class UserProfile extends React.Component<UserProfileProps, UserProfileState> {
       console.log("ERROR:", error);
     }
   }
+
+  private async onSignOut() {
+    await authApi.signOut();
+    this.props.navigation.navigate("Splash");
+  }
 }
 
 const UserProfileConnected = connect(
@@ -95,5 +107,15 @@ const UserProfileConnected = connect(
     };
   }
 )(UserProfile);
+
+const styles = StyleSheet.create({
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 30,
+    marginBottom: 20,
+    alignSelf: "center"
+  }
+});
 
 export { UserProfileConnected as UserProfile };
