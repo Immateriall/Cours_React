@@ -2,10 +2,10 @@ import React from "react";
 import { Button, Text, View } from "react-native";
 import { connect } from "react-redux";
 
-import { authApi, User } from "../api/AuthApi";
-import { setUserAction } from "../store/actions";
-import { RootState } from "../store/RootState";
-import { getUser } from "../store/selectors";
+import { authApi, User } from "../../api/AuthApi";
+import { setUserAction } from "../../store/actions";
+import { RootState } from "../../store/RootState";
+import { getUser } from "../../store/selectors";
 
 type UserProfileProps = {
   user: User;

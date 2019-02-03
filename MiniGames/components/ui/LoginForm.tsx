@@ -3,9 +3,9 @@ import React from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { connect } from "react-redux";
 
-import { authApi, User } from "../api/AuthApi";
-import { setUserAction } from "../store/actions";
-import { Spacer } from "./Spacer";
+import { authApi, User } from "../../api/AuthApi";
+import { setUserAction } from "../../store/actions";
+import { Spacer } from "../common/Spacer";
 
 type LoginFormValues = {
   email: string;

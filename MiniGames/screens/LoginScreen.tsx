@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 
-import { LoginForm } from "../components/LoginForm";
-import { Spacer } from "../components/Spacer";
+import { LoginForm } from "../components/ui/LoginForm";
+import { Spacer } from "../components/common/Spacer";
 
 export default class LoginScreen extends React.Component {
   render() {
