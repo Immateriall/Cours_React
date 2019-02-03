@@ -1,24 +1,22 @@
 import React, { Component } from "react";
 import {
-  View,
-  ScrollView,
   Button,
   Image,
+  ScrollView,
   StyleSheet,
-  Dimensions
+  Text,
+  View
 } from "react-native";
-
+import { Spacer } from "../common/Spacer";
 type GameInfos = {
   imageUri: string;
   routeScreen: string;
   gameName: string;
 };
-
 type CarouselProps = {
   navigation: any;
   data: GameInfos[];
 };
-
 export class Carousel extends React.Component<CarouselProps> {
   render() {
     return (
@@ -29,16 +27,21 @@ export class Carousel extends React.Component<CarouselProps> {
           showsHorizontalScrollIndicator={false}
         >
           {this.props.data.map(gameInfo => (
-            <View style={{ flex: 1 }}>
+            <View style={styles.gameView} key={gameInfo.gameName}>
+              <Text style={styles.title}>{gameInfo.gameName}</Text>
+              <Spacer size="medium" />
               <Image
                 style={styles.image}
                 key={gameInfo.routeScreen}
                 source={{ uri: gameInfo.imageUri }}
               />
-              <Button
-                title={gameInfo.gameName}
-                onPress={this.onButtonPress.bind(this, gameInfo.routeScreen)}
-              />
+              <Spacer size="medium" />
+              <View style={styles.button}>
+                <Button
+                  title={"Jouer"}
+                  onPress={this.onButtonPress.bind(this, gameInfo.routeScreen)}
+                />
+              </View>
             </View>
           ))}
         </ScrollView>
@@ -50,13 +53,24 @@ export class Carousel extends React.Component<CarouselProps> {
     this.props.navigation.navigate(routeScreen);
   }
 }
-
 const styles = StyleSheet.create({
   scrollContainer: {
-    height: 500
+    height: "100%"
+  },
+  gameView: {
+    flex: 1,
+    alignItems: "center"
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 30
   },
   image: {
     width: 400,
     height: 400
+  },
+  button: {
+    width: "50%",
+    alignSelf: "center"
   }
 });

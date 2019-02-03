@@ -11,10 +11,12 @@ import MainScreen from "./screens/MainScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import SimonGameScreen from "./screens/SimonGameScreen";
 import SplashScreen from "./screens/SplashScreen";
+import VibrationsGameScreen from "./screens/VibrationGameScreen";
 
 const AppStack = createStackNavigator({
   Main: MainScreen,
-  Differences: DifferencesScreen,
+  DifferencesGame: DifferencesScreen,
+  VibrationsGame: VibrationsGameScreen,
   GameOver: GameOverScreen,
   SimonGame: SimonGameScreen
 });

@@ -16,7 +16,7 @@ class FirebaseService {
     this.app = firebase.initializeApp(firebaseConfig);
   }
 
-²  public async signUp(
+  public async signUp(
     email: string,
     password: string,
     pseudo: string,
