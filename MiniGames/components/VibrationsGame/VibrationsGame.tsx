@@ -40,7 +40,6 @@ export class VibrationsGame extends React.Component<
     setTimeout(this.startVibration.bind(this), randomDelay);
   }
   render() {
-    console.log(moment().format());
     return (
       <View style={styles.container}>
         {this.state.hasVibrated && (
@@ -58,7 +57,6 @@ export class VibrationsGame extends React.Component<
     if (this.startTime) {
       const stopTime = moment();
       const diff = stopTime.diff(this.startTime);
-      console.log("DIFFERENCE : ", diff);
       this.stopVibration();
       this.props.onGameOver(diff);
     }

@@ -1,3 +1,4 @@
+import { FontAwesome } from "@expo/vector-icons";
 import React, { Component } from "react";
 import {
   Button,
@@ -5,9 +6,12 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View
 } from "react-native";
+
 import { Spacer } from "../common/Spacer";
+
 type GameInfos = {
   imageUri: string;
   routeScreen: string;
@@ -21,6 +25,12 @@ export class Carousel extends React.Component<CarouselProps> {
   render() {
     return (
       <View style={styles.scrollContainer}>
+        <TouchableOpacity
+          style={{ alignSelf: "flex-start", marginLeft: 20, marginTop: 20 }}
+          onPress={this.onUserPress.bind(this)}
+        >
+          <FontAwesome name="user" size={32} color="black" />
+        </TouchableOpacity>
         <ScrollView
           horizontal
           pagingEnabled
@@ -33,7 +43,7 @@ export class Carousel extends React.Component<CarouselProps> {
               <Image
                 style={styles.image}
                 key={gameInfo.routeScreen}
-                source={{ uri: gameInfo.imageUri }}
+                source={gameInfo.imageUri}
               />
               <Spacer size="medium" />
               <View style={styles.button}>
@@ -48,8 +58,12 @@ export class Carousel extends React.Component<CarouselProps> {
       </View>
     );
   }
+
+  private onUserPress() {
+    this.props.navigation.navigate("UserProfile");
+  }
+
   private onButtonPress(routeScreen: string) {
-    console.log("BUTTON PRESS");
     this.props.navigation.navigate(routeScreen);
   }
 }

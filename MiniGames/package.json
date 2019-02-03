@@ -6,10 +6,12 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "lint": "eslint --ignore-path .gitignore .babel.config.js"
   },
   "dependencies": {
     "@types/expo": "^31.0.7",
+    "@types/expo__vector-icons": "^9.0.0",
     "@types/react": "^16.7.18",
     "@types/react-native": "^0.57.27",
     "@types/react-navigation": "^3.0.1",
@@ -25,6 +27,7 @@
     "expo": "^31.0.2",
     "firebase": "^5.8.1",
     "formik": "^1.4.2",
+    "moment": "^2.24.0",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
     "react-native-orientation": "^3.1.3",

@@ -1,22 +1,22 @@
-import React, { Component } from "react";
-import { View, ScrollView, Image, StyleSheet, Dimensions } from "react-native";
-import { Carousel } from "../components/ui/Carousel";
+import React, { Component } from 'react';
+
+import { Carousel } from '../components/ui/Carousel';
 
 export default class MainMenuScreen extends React.Component {
   render() {
     const gameInfos = [
       {
-        imageUri: "http://www.logologo.com/logos/globe-compass-logo.jpg",
+        imageUri: require("../assets/vibrations_logo.png"),
         routeScreen: "VibrationsGame",
         gameName: "Vibrations"
       },
       {
-        imageUri: "http://www.logologo.com/logos/horse-logo2.jpg",
+        imageUri: require("../assets/simon_logo.png"),
         routeScreen: "SimonGame",
         gameName: "Simon"
       },
       {
-        imageUri: "http://www.logologo.com/logos/horse-logo2.jpg",
+        imageUri: require("../assets/differences_logo.png"),
         routeScreen: "DifferencesGame",
         gameName: "7 Différences"
       }

@@ -1,5 +1,5 @@
 import React from "react";
-import { VibrationsGame } from "../components/VibrationGame/VibrationGame";
+import { VibrationsGame } from "../components/VibrationsGame/VibrationsGame";
 
 export default class VibrationsGameScreen extends React.Component {
   render() {
@@ -8,6 +8,6 @@ export default class VibrationsGameScreen extends React.Component {
     );
   }
   private onGameOver(score: number) {
-    this.props.navigation.navigate("GameOver", { score: score });
+    this.props.navigation.navigate("GameOver", { score: score, gameName: "vibrations" });
   }
 }

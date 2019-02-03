@@ -10,6 +10,6 @@ export default class DifferencesScreen extends React.Component {
   }
 
   private onGameOver(score: number) {
-    this.props.navigation.navigate("GameOver", { score: score });
+    this.props.navigation.navigate("GameOver", { score: score, gameName: "differences" });
   }
 }
