@@ -16,22 +16,24 @@ class FirebaseService {
     this.app = firebase.initializeApp(firebaseConfig);
   }
 
-  public async signUp(email: string, password: string, pseudo: string, profileImageUri?: string) {
-    console.log("SIGN UP : ", email, "/", password);
+  public async signUp(
+    email: string,
+    password: string,
+    pseudo: string,
+    profileImageUri?: string
+  ) {
 
     try {
       const userCredentials = await this.app
         .auth()
         .createUserWithEmailAndPassword(email, password);
       const userId = userCredentials.user.uid;
-      console.log("Created user : ", userId);
       const user: User = {
         id: userId,
         email,
         pseudo,
         profileImageUri
       };
-      console.log("USER : ", user);
       this.app
         .database()
         .ref("users/" + userId)
@@ -48,28 +50,15 @@ class FirebaseService {
   }
 
   public async login(email: string, password: string) {
-    console.log("LOGIN : ", email, "/", password);
-
     try {
       const userCredentials = await this.app
         .auth()
         .signInWithEmailAndPassword(email, password);
-      const userId = userCredentials.user.uid;
-      const data = await this.app
-        .database()
-        .ref("/users/" + userId)
-        .once("value", snapshot => {
-          const res = snapshot.val();
-          const userData: User = {
-            id: userId,
-            email: res.email,
-            pseudo: res.pseudo
-          };
-          console.log("----->", userData.email, "/", userData.pseudo);
-
-          return userData;
-        });
-      return data;
+      if (userCredentials && userCredentials.user) {
+        const userData = await this.getUserData(userCredentials.user.uid);
+        return userData;
+      }
+      return null;
     } catch (error) {
       throw error;
     }
@@ -89,6 +78,38 @@ class FirebaseService {
     } catch (error) {
       throw error;
     }
+  }
+
+  private async getUserData(userId: string) {
+    const data = await this.app
+      .database()
+      .ref("/users/" + userId)
+      .once("value", snapshot => {
+        const res = snapshot.val();
+        const userData: User = {
+          id: userId,
+          email: res.email,
+          pseudo: res.pseudo,
+          profileImageUri: res.profileImageUri,
+          scores: res.scores
+        };
+      });
+    return data;
+  }
+
+  public async getUser(onChange: (user: any) => void) {
+    await this.app.auth().onAuthStateChanged(async user => {
+      if (user) {
+        const userData = await this.getUserData(user.uid);
+        onChange(userData);
+      } else {
+        onChange(null);
+      }
+    });
+  }
+
+  public async signOut() {
+    await this.app.auth().signOut();
   }
 }
 

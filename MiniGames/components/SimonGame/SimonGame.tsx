@@ -113,7 +113,6 @@ export class SimonGame extends React.Component<SimonGameProps, SimonGameState> {
       this.props.onGameOver(this.state.sequenceColors.length - 1);
 
     if (isEqual(this.pressedColors, this.state.sequenceColors)) {
-      console.log("END OF SEQUENCE");
       this.pressedColors = [];
       let sequenceColors = this.state.sequenceColors;
       const newColor = this.getRandomColor(

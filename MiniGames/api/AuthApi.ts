@@ -16,7 +16,6 @@ export type User = {
 
 class AuthApi {
   public async login(email: string, password: string) {
-    console.log("LOGIN");
 
     const userData = await firebaseService.login(email, password);
     const user: User = JSON.parse(JSON.stringify(userData));
@@ -25,11 +24,9 @@ class AuthApi {
   }
 
   public async signUp(email: string, password: string, pseudo: string, profileImageUri?: string) {
-    console.log("SIGNUP");
 
     const userData = await firebaseService.signUp(email, password, pseudo, profileImageUri);
     const user: User = JSON.parse(JSON.stringify(userData));
-    // console.log("SIGNED UP USER", user);
 
     return user;
   }
@@ -39,6 +36,16 @@ class AuthApi {
     // const newUser: User = JSON.parse(JSON.stringify(newUserData));
 
     return newUserData;
+  }
+
+  public async getUser(onChange: (user: any) => void) {
+    return await firebaseService.getUser(user =>
+      onChange(JSON.parse(JSON.stringify(user)))
+    );
+  }
+  
+  public async signOut() {
+    return await firebaseService.signOut();
   }
 }
 

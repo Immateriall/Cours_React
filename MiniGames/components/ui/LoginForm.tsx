@@ -71,7 +71,6 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState> {
   private async onLogin(values: LoginFormValues) {
     try {
       const user = await authApi.login(values.email, values.password);
-      console.log("LOGGED USER: ", user);
       if (user) {
         this.props.setUserAction(user);
         this.props.onLoginSuccess();

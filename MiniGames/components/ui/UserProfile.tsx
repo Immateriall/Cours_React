@@ -6,10 +6,12 @@ import { authApi, User } from "../../api/AuthApi";
 import { setUserAction } from "../../store/actions";
 import { RootState } from "../../store/RootState";
 import { getUser } from "../../store/selectors";
+import { Spacer } from "../common/Spacer";
 
 type UserProfileProps = {
   user: User;
   setUserAction: typeof setUserAction;
+  navigation: any;
 };
 
 type UserProfileState = {
@@ -34,9 +36,13 @@ class UserProfile extends React.Component<UserProfileProps, UserProfileState> {
         <Text>INFOS USER</Text>
         {pseudo && <Text>Pseudo : {pseudo}</Text>}
         {email && <Text>Email : {email}</Text>}
-        {profileImageUri && <Image source={{uri: profileImageUri}} style={styles.image}></Image>}
+        {profileImageUri && (
+          <Image source={{ uri: profileImageUri }} style={styles.image} />
+        )}
         {scores && this.renderScores()}
         <Button title={"TEST SCORE"} onPress={this.onTestScore.bind(this)} />
+        <Spacer size="medium"></Spacer>
+        <Button title={"Se déconnecter"} onPress={this.onSignOut.bind(this)} />
       </View>
     );
   }
@@ -81,6 +87,11 @@ class UserProfile extends React.Component<UserProfileProps, UserProfileState> {
     } catch (error) {
       console.log("ERROR:", error);
     }
+  }
+
+  private async onSignOut() {
+    await authApi.signOut();
+    this.props.navigation.navigate("Splash");
   }
 }
 

@@ -12,14 +12,13 @@ export default class MainScreen extends React.Component {
       <View style={styles.container}>
         <Text>Best view ever</Text>
         <Text>MAIN MENU</Text>
-        <UserProfile />
+        <UserProfile navigation={this.props.navigation}/>
         {/* <Button title={"Connexion"} onPress={this.onButtonPress.bind(this)} /> */}
       </View>
     );
   }
 
   private onButtonPress() {
-    console.log("BUTTON PRESS");
     this.props.navigation.navigate("Login");
   }
 }
