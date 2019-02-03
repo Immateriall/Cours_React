@@ -1,6 +1,13 @@
 import { difference } from "lodash";
 import React, { Component, ReactElement } from "react";
-import {Dimensions, StyleSheet, Text, TouchableOpacity, View, Button } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Button
+} from "react-native";
 
 import { CircleShape } from "./CircleShape";
 import { DiamondShape } from "./DiamondShape";
@@ -17,8 +24,6 @@ type DifferencesGameState = {
   score: number;
   //Tableau pour connaître les paires sélectionnées
   isLineSelected: boolean[];
-  //Variable pour connaître le nombre total de différences en jeu
-  maxDiff: number;
   //Variable pour connaître le nombre de différences trouvées
   nbDiff: number;
   //Variable pour connaître le nombre de manches
@@ -50,15 +55,21 @@ const shapes = [
   <DiamondShape />
 ];
 
-export class DifferencesGame extends React.Component<DifferencesGameProps, DifferencesGameState> {
+export class DifferencesGame extends React.Component<
+  DifferencesGameProps,
+  DifferencesGameState
+> {
+  //Tableau contenant les paires de figures de la manche
   private scene: Pair[] = [];
+
+  //Variable pour connître le nombre de différences dans la manche
+  private maxDiff: number = 0;
 
   constructor(props: any) {
     super(props);
     this.state = {
       score: 0,
       isLineSelected: new Array(numberShapes).fill(false),
-      maxDiff: 0,
       nbDiff: 0,
       round: 1
     };
@@ -72,15 +83,22 @@ export class DifferencesGame extends React.Component<DifferencesGameProps, Diffe
     return (
       <View style={styles.container}>
         <View style={styles.default}>
-          <Text style={{ fontWeight: "bold" }}> Score: {this.state.score}</Text>
+          <Text style={{ fontWeight: "bold", fontSize: 18 }}>
+            {" "}
+            Score: {this.state.score}
+          </Text>
           <View style={{ width: 150, height: 50 }} />
-          <Text style={{ fontWeight: "bold" }}> Manche: {this.state.round} / {maxRound}</Text>
+          <Text style={{ fontWeight: "bold", fontSize: 18 }}>
+            {" "}
+            Manche: {this.state.round} / {maxRound}
+          </Text>
         </View>
         {this.renderScene()}
       </View>
     );
   }
 
+  //Charge une nouvelle manche ou termine la partie
   private reload() {
     if (this.state.round != maxRound) {
       this.setState({
@@ -90,7 +108,7 @@ export class DifferencesGame extends React.Component<DifferencesGameProps, Diffe
 
       this.scene = [];
     } else {
-      this.props.onGameOver(this.state.score)
+      this.props.onGameOver(this.state.score);
     }
   }
 
@@ -135,7 +153,6 @@ export class DifferencesGame extends React.Component<DifferencesGameProps, Diffe
   //Créer une scène avec des figures
   private createScene() {
     let scene: Pair[] = [];
-    let maxDiff = this.state.maxDiff;
     for (let index = 0; index < numberShapes; index++) {
       //On choisit aléatoirement 1 figure parmis 5
       const randomShape = this.getRandomShape(null);
@@ -152,10 +169,7 @@ export class DifferencesGame extends React.Component<DifferencesGameProps, Diffe
       scene.push(pair);
 
       if (isCorrect) {
-        maxDiff += 1;
-        this.setState({
-          maxDiff
-        });
+        this.maxDiff += 1;
       }
     }
     return scene;
@@ -169,7 +183,7 @@ export class DifferencesGame extends React.Component<DifferencesGameProps, Diffe
     ];
   }
 
-  //Change le score en fonction de la paire sélectionnée
+  //Change le score et vérifie si la manche est terminée en fonction de la paire sélectionnée
   private setScore(diff: number, id: number) {
     let isLineSelected = this.state.isLineSelected;
     isLineSelected[id] = true;
@@ -185,8 +199,7 @@ export class DifferencesGame extends React.Component<DifferencesGameProps, Diffe
       nbDiff
     });
 
-    window.console.log(nbDiff + "   " + this.state.maxDiff);
-    if (nbDiff == this.state.maxDiff) {
+    if (nbDiff == this.maxDiff) {
       this.reload();
     }
   }
@@ -202,22 +215,28 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     backgroundColor: "lightgreen",
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    marginHorizontal: 40,
+    paddingHorizontal: 10
   },
 
   wrong: {
     flex: 1,
     flexDirection: "row",
     backgroundColor: "#d73232",
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    marginHorizontal: 40,
+    paddingHorizontal: 10
   },
 
   default: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    marginHorizontal: 40,
+    paddingHorizontal: 10
   }
 });

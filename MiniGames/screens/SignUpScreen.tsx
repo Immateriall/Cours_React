@@ -4,10 +4,10 @@ import { SignUpForm } from "../components/ui/SignUpForm";
 
 export default class SignUpScreen extends React.Component {
   render() {
-    return <SignUpForm onSignUpSuccess={this.onSignUpSuccess.bind(this)}/>;
+    return <SignUpForm onSignUpSuccess={this.onSignUpSuccess.bind(this)} />;
   }
 
   private onSignUpSuccess() {
-    this.props.navigation.navigate("Main")
+    this.props.navigation.navigate("Main");
   }
 }

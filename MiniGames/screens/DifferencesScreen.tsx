@@ -5,9 +5,7 @@ import { DifferencesGame } from "../components/DifferencesGame/DifferencesGame";
 export default class DifferencesScreen extends React.Component {
   render() {
     return (
-      <DifferencesGame
-        onGameOver={(score: number) => this.onGameOver(score)}
-      />
+      <DifferencesGame onGameOver={(score: number) => this.onGameOver(score)} />
     );
   }
 
