@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Text, View } from "react-native";
+import { Button, Text, View, Image, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 
 import { authApi, User } from "../../api/AuthApi";
@@ -27,13 +27,14 @@ class UserProfile extends React.Component<UserProfileProps, UserProfileState> {
   render() {
     if (!this.props.user) return null;
 
-    const { pseudo, email, scores } = this.props.user;
+    const { pseudo, email, profileImageUri, scores } = this.props.user;
 
     return (
       <View style={{ backgroundColor: "pink" }}>
         <Text>INFOS USER</Text>
         {pseudo && <Text>Pseudo : {pseudo}</Text>}
         {email && <Text>Email : {email}</Text>}
+        {profileImageUri && <Image source={{uri: profileImageUri}} style={styles.image}></Image>}
         {scores && this.renderScores()}
         <Button title={"TEST SCORE"} onPress={this.onTestScore.bind(this)} />
       </View>
@@ -95,5 +96,15 @@ const UserProfileConnected = connect(
     };
   }
 )(UserProfile);
+
+const styles = StyleSheet.create({
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 30,
+    marginBottom: 20,
+    alignSelf: "center"
+  }
+});
 
 export { UserProfileConnected as UserProfile };

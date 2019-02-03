@@ -8,7 +8,8 @@ export type User = {
   id: string;
   email: string;
   pseudo: string;
-  scores: {
+  profileImageUri?: string;
+  scores?: {
     [gameId: string]: GameScore;
   };
 };
@@ -23,10 +24,10 @@ class AuthApi {
     return user;
   }
 
-  public async signUp(email: string, password: string, pseudo: string) {
+  public async signUp(email: string, password: string, pseudo: string, profileImageUri?: string) {
     console.log("SIGNUP");
 
-    const userData = await firebaseService.signUp(email, password, pseudo);
+    const userData = await firebaseService.signUp(email, password, pseudo, profileImageUri);
     const user: User = JSON.parse(JSON.stringify(userData));
     // console.log("SIGNED UP USER", user);
 

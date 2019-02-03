@@ -16,7 +16,7 @@ class FirebaseService {
     this.app = firebase.initializeApp(firebaseConfig);
   }
 
-  public async signUp(email: string, password: string, pseudo: string) {
+  public async signUp(email: string, password: string, pseudo: string, profileImageUri?: string) {
     console.log("SIGN UP : ", email, "/", password);
 
     try {
@@ -28,7 +28,8 @@ class FirebaseService {
       const user: User = {
         id: userId,
         email,
-        pseudo
+        pseudo,
+        profileImageUri
       };
       console.log("USER : ", user);
       this.app
