@@ -1,12 +1,12 @@
-import React from "react";
-import { Button, Image, StyleSheet, Text, View } from "react-native";
-import { connect } from "react-redux";
+import React from 'react';
+import { Button, Image, StyleSheet, Text, View } from 'react-native';
+import { connect } from 'react-redux';
 
-import { authApi, User } from "../../api/AuthApi";
-import { setUserAction } from "../../store/actions";
-import { RootState } from "../../store/RootState";
-import { getUser } from "../../store/selectors";
-import { Spacer } from "../common/Spacer";
+import { authApi, User } from '../../api/AuthApi';
+import { setUserAction } from '../../store/actions';
+import { RootState } from '../../store/RootState';
+import { getUser } from '../../store/selectors';
+import { Spacer } from '../common/Spacer';
 
 type UserProfileProps = {
   user: User;
@@ -29,8 +29,7 @@ class UserProfile extends React.Component<UserProfileProps, UserProfileState> {
   render() {
     if (!this.props.user) return null;
 
-    const { pseudo, email, profileImageUri, scores } = this.props.user;
-
+    const { pseudo, email, scores } = this.props.user;
     return (
       <View style={{ alignItems: "center" }}>
         <Spacer size="medium" />
@@ -39,14 +38,26 @@ class UserProfile extends React.Component<UserProfileProps, UserProfileState> {
         {pseudo && <Text>Pseudo : {pseudo}</Text>}
         {email && <Text>Email : {email}</Text>}
         <Spacer size="medium" />
-        {profileImageUri && profileImageUri.length > 0 && (
-          <Image source={{ uri: profileImageUri }} style={styles.image} />
-        )}
+        {this.renderImage()}
         {scores && this.renderScores()}
         <Spacer size="medium" />
         <Button title={"Se déconnecter"} onPress={this.onSignOut.bind(this)} />
       </View>
     );
+  }
+
+  private renderImage() {
+    if (
+      this.props.user.profileImageUri &&
+      this.props.user.profileImageUri.length > 0
+    )
+      return (
+        <Image
+          source={{ uri: this.props.user.profileImageUri }}
+          style={styles.image}
+        />
+      );
+    return null;
   }
 
   private renderScores() {
